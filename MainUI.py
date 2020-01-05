@@ -4,8 +4,9 @@
  date: 2020/1/5  19:02
 """
 import sys
+
 from PyQt5.QtWidgets import QApplication, QWidget, \
-    QDesktopWidget, QToolTip, QPushButton, QMessageBox,QMainWindow,QAction,qApp
+    QDesktopWidget, QToolTip, QPushButton, QMessageBox, QMainWindow, QAction, qApp, QMenu
 from PyQt5.QtGui import QIcon, QFont
 
 
@@ -22,7 +23,7 @@ class MainUI(QMainWindow):
         self.setToolTip('This is a <b> QWidget <b/> widget')
 
         # 活动
-        exitAct = QAction(QIcon('res/main_ui_title_icon.png'),'&Exit',self)
+        exitAct = QAction(QIcon('res/main_ui_title_icon.png'), '&Exit', self)
         exitAct.setShortcut('Ctrl+Q')
         exitAct.setStatusTip('Exit application')
         exitAct.triggered.connect(qApp.quit)
@@ -35,6 +36,22 @@ class MainUI(QMainWindow):
         fileMenu = menubar.addMenu('&File')
         fileMenu.addAction(exitAct)
 
+        # 子菜单
+        impMenu = QMenu('import', self)
+        imact = QAction('import mail', self)
+        impMenu.addAction(imact)
+        newAct = QAction('New', self)
+        fileMenu.addAction(newAct)
+        fileMenu.addMenu(impMenu)
+
+        # check menu
+        viewStartAct = QAction('View Start statusBar', self, checkable=True)
+        viewStartAct.setStatusTip('View status bar')
+        viewStartAct.setCheckable(True)
+        viewStartAct.triggered.connect(self.toggleMenu)
+        viewMenu = menubar.addMenu('Check menu')
+        viewMenu.addAction(viewStartAct)
+
         # 按钮
         btn = QPushButton('确认', self)
         btn.setToolTip('这是一个按钮')
@@ -42,6 +59,23 @@ class MainUI(QMainWindow):
         btn.move(50, 50)
         btn.clicked.connect(QApplication.instance().quit)
         self.center()
+
+    def contextMenuEvent(self, event):
+        # context menu
+        cmenu = QMenu(self)
+        newAct2 = cmenu.addAction("New")
+        openAct = cmenu.addAction("Open")
+        quitAct = cmenu.addAction("Quit")
+        action = cmenu.exec_(self.mapFromGlobal(event.pos()))
+
+        if action == quitAct:
+            qApp.quit()
+
+    def toggleMenu(self, state):
+        if state:
+            self.statusBar().show()
+        else:
+            self.statusBar().hide()
 
     # 退出二次确定
     def closeEvent(self, event):
@@ -60,9 +94,9 @@ class MainUI(QMainWindow):
         self.move(qr.topLeft())
 
 
-
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     win = MainUI()
     win.show()
+
     sys.exit(app.exec())
