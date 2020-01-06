@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
 """
  author: weihuan
+ date: 2020/1/6  9:50
+"""
+# -*- coding: utf-8 -*-
+"""
+ author: weihuan
  date: 2020/1/5  19:02
 """
 import sys
 
-from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, \
     QDesktopWidget, QToolTip, QPushButton, QMessageBox, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QLCDNumber, QSlider, QLabel, QFrame, QInputDialog, QColorDialog, QFontDialog, QFileDialog
-from PyQt5.QtGui import QIcon, QFont, QColor
+    QGridLayout, QLabel, QLineEdit, QTextEdit
+from PyQt5.QtGui import QIcon, QFont
 
 
 class MainUI(QMainWindow):
@@ -24,6 +28,8 @@ class MainUI(QMainWindow):
         self.setWindowTitle("文本工具")
         self.setWindowIcon(QIcon('res/main_ui_title_icon.png'))
         self.setToolTip('This is a <b> QWidget <b/> widget')
+
+
 
         # 活动
         exitAct = QAction(QIcon('./res/exit_app.png'), '&Exit', self)
@@ -55,35 +61,57 @@ class MainUI(QMainWindow):
         viewMenu = menubar.addMenu('Check menu')
         viewMenu.addAction(viewStartAct)
 
+        # 按钮
+        # btnOk = QPushButton('确认')
+        # btnCancel = QPushButton('取消')
+        # hbox = QHBoxLayout()
+        # hbox.addStretch(1)
+        # hbox.addWidget(btnOk)
+        # hbox.addWidget(btnCancel)
+        #
+        # vbox = QVBoxLayout()
+        # vbox.addStretch(1)
+        # vbox.addLayout(hbox)
+        # self.setLayout(vbox)
+
+        # btn.setToolTip('这是一个按钮')
+        # btn.resize(btn.sizeHint())
+        # # btn.move(50, 50)
+        # btn.clicked.connect(QApplication.instance().quit)
+
+        grid = QGridLayout()
+        self.setLayout(grid)
+
+
+        self.widget = QWidget()
+        self.widget.setLayout(grid)
+        self.setCentralWidget(self.widget)
+
+        grid.setSpacing(10)
+        title = QLabel('title')
+        author = QLabel('author')
+        review = QLabel('review')
+        titleEdt = QLineEdit()
+        authorEdt = QLineEdit()
+        reviewEdt = QTextEdit()
+
+        grid.addWidget(title,1,0)
+        grid.addWidget(titleEdt,1,1)
+
+        grid.addWidget(author,2,0)
+        grid.addWidget(authorEdt,2,1)
+
+        grid.addWidget(review,3,0)
+        grid.addWidget(reviewEdt,3,1,5,1)
+
+
+
+
+        # toolbar
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(exitAct)
 
-        vbox = QVBoxLayout()
-
-        col = QColor(255,0,255)
-
-        self.frame = QFrame()
-
-
-
-
-
-        widget = QWidget()
-        widget.setLayout(vbox)
-        widget.setMouseTracking(True)
-        self.setCentralWidget(widget)
-
         self.show()
-
-
-    def keyPressEvent (self, e):
-        if e.key() == Qt.Key_Escape:
-            print('test')
-            return
-
-    def mouseMoveEvent (self, e):
-        text = "X: {}, Y: {}".format(e.x(), e.y())
-        self.text.setText(text)
 
     def contextMenuEvent (self, event):
         # context menu
@@ -124,3 +152,4 @@ if __name__ == '__main__':
     win = MainUI()
 
     sys.exit(app.exec())
+

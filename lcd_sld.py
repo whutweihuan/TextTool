@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
  author: weihuan
- date: 2020/1/5  19:02
+ date: 2020/1/6  10:26
 """
+
 import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, \
     QDesktopWidget, QToolTip, QPushButton, QMessageBox, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QLCDNumber, QSlider, QLabel, QFrame, QInputDialog, QColorDialog, QFontDialog, QFileDialog
-from PyQt5.QtGui import QIcon, QFont, QColor
+    QGridLayout, QLCDNumber, QSlider
+from PyQt5.QtGui import QIcon, QFont
 
 
 class MainUI(QMainWindow):
@@ -24,6 +25,8 @@ class MainUI(QMainWindow):
         self.setWindowTitle("文本工具")
         self.setWindowIcon(QIcon('res/main_ui_title_icon.png'))
         self.setToolTip('This is a <b> QWidget <b/> widget')
+
+
 
         # 活动
         exitAct = QAction(QIcon('./res/exit_app.png'), '&Exit', self)
@@ -58,32 +61,29 @@ class MainUI(QMainWindow):
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(exitAct)
 
+        lcd = QLCDNumber(self)
+        sld = QSlider(Qt.Horizontal,self)
+        sld.valueChanged.connect(lcd.display)
+
         vbox = QVBoxLayout()
-
-        col = QColor(255,0,255)
-
-        self.frame = QFrame()
-
-
-
-
+        vbox.addWidget(lcd)
+        vbox.addWidget(sld)
 
         widget = QWidget()
         widget.setLayout(vbox)
-        widget.setMouseTracking(True)
         self.setCentralWidget(widget)
+
 
         self.show()
 
-
-    def keyPressEvent (self, e):
+    def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             print('test')
             return
+    def mouseMoveEvent(self, e):
+        print(e.x(),e.y())
+        return
 
-    def mouseMoveEvent (self, e):
-        text = "X: {}, Y: {}".format(e.x(), e.y())
-        self.text.setText(text)
 
     def contextMenuEvent (self, event):
         # context menu

@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 """
  author: weihuan
- date: 2020/1/5  19:02
+ date: 2020/1/6  10:45
 """
 import sys
 
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QWidget, \
     QDesktopWidget, QToolTip, QPushButton, QMessageBox, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QLCDNumber, QSlider, QLabel, QFrame, QInputDialog, QColorDialog, QFontDialog, QFileDialog
-from PyQt5.QtGui import QIcon, QFont, QColor
+    QGridLayout, QLCDNumber, QSlider, QLabel
+from PyQt5.QtGui import QIcon, QFont
 
 
 class MainUI(QMainWindow):
@@ -24,6 +24,8 @@ class MainUI(QMainWindow):
         self.setWindowTitle("文本工具")
         self.setWindowIcon(QIcon('res/main_ui_title_icon.png'))
         self.setToolTip('This is a <b> QWidget <b/> widget')
+
+
 
         # 活动
         exitAct = QAction(QIcon('./res/exit_app.png'), '&Exit', self)
@@ -58,32 +60,27 @@ class MainUI(QMainWindow):
         self.toolbar = self.addToolBar('Exit')
         self.toolbar.addAction(exitAct)
 
+        self.text = QLabel("X: {}, Y: {}".format(0 ,0))
         vbox = QVBoxLayout()
-
-        col = QColor(255,0,255)
-
-        self.frame = QFrame()
-
-
-
-
+        vbox.addWidget(self.text)
+        vbox.addStretch(1)
 
         widget = QWidget()
         widget.setLayout(vbox)
         widget.setMouseTracking(True)
         self.setCentralWidget(widget)
 
+
         self.show()
 
-
-    def keyPressEvent (self, e):
+    def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             print('test')
             return
-
-    def mouseMoveEvent (self, e):
-        text = "X: {}, Y: {}".format(e.x(), e.y())
+    def mouseMoveEvent(self, e):
+        text = "X: {}, Y: {}".format(e.x(),e.y())
         self.text.setText(text)
+
 
     def contextMenuEvent (self, event):
         # context menu

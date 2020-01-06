@@ -60,13 +60,27 @@ class MainUI(QMainWindow):
 
         vbox = QVBoxLayout()
 
-        col = QColor(255,0,255)
+        col = QColor(255, 0, 255)
 
         self.frame = QFrame()
+        self.frame.setStyleSheet("QWidget { background-color: %s }" % col.name())
+        vbox.addWidget(self.frame)
 
+        btn = QPushButton("输入框")
+        btn.clicked.connect(self.showdialog)
+        vbox.addWidget(btn)
 
+        btn2 = QPushButton("颜色框")
+        btn2.clicked.connect(self.showdialog)
+        vbox.addWidget(btn2)
 
+        btn3 = QPushButton("字体框")
+        btn3.clicked.connect(self.showdialog)
+        vbox.addWidget(btn3)
 
+        btn4 = QPushButton("文件框")
+        btn4.clicked.connect(self.showdialog)
+        vbox.addWidget(btn4)
 
         widget = QWidget()
         widget.setLayout(vbox)
@@ -75,6 +89,27 @@ class MainUI(QMainWindow):
 
         self.show()
 
+    def showdialog (self):
+
+        if self.sender().text() == '输入框':
+            text, ok = QInputDialog.getText(self, '颜色', '输入颜色RGB,如:#cdcdcd')
+            if ok:
+                self.frame.setStyleSheet("QWidget { background-color: %s }" % text)
+        elif self.sender().text() == '颜色框':
+            col = QColorDialog.getColor()
+            if col.isValid():
+                self.frame.setStyleSheet("QWidget { background-color: %s }" % col.name())
+        elif self.sender().text() == '字体框':
+            font, ok = QFontDialog.getFont()
+            if ok:
+                print(font)
+        elif self.sender().text() == '文件框':
+            fname = QFileDialog.getOpenFileName(self, 'Open file', '/home')
+            if fname[0]:
+                f = open(fname[0], 'r')
+                with  f:
+                    data = f.read()
+                    print(data)
 
     def keyPressEvent (self, e):
         if e.key() == Qt.Key_Escape:
