@@ -1,0 +1,5 @@
+透明度
+安卓默认颜色有两种方式，六位和八位，六位数字很好理解就是 RGB，八位的是 ARGB 。设置透明度可以直接用八位的编码表示。同时也可以通过设置 alpha 值完成，view = （...).findViewByid(...), view .getbackground().setAlpha(0.8), 80%的透明度，透明度为 0 是就是不透明。
+
+模糊
+这个东西可以通过之前学习的 Glide 库来完成，之前一直困惑 Glide() 设置 ImageView，但是背景是一个layout要怎么操作？其实很简单，之前一直 Framelayout 的作用，现在可以发挥它的用途了，FrameLayout最大的特点就是会重叠刚好满足了我们的需要，我们只需要把图片放到第下面一层的 ImageView 就可以了。当然只靠一个Glide也只能加载透明度

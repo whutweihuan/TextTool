@@ -5,10 +5,11 @@
 """
 import sys
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QBasicTimer
 from PyQt5.QtWidgets import QApplication, QWidget, \
     QDesktopWidget, QToolTip, QPushButton, QMessageBox, QMainWindow, QAction, qApp, QMenu, QHBoxLayout, QVBoxLayout, \
-    QGridLayout, QLCDNumber, QSlider, QLabel, QFrame, QInputDialog, QColorDialog, QFontDialog, QFileDialog
+    QGridLayout, QLCDNumber, QSlider, QLabel, QFrame, QInputDialog, QColorDialog, QFontDialog, QFileDialog, QCheckBox, \
+    QProgressBar
 from PyQt5.QtGui import QIcon, QFont, QColor
 
 
@@ -59,14 +60,29 @@ class MainUI(QMainWindow):
         self.toolbar.addAction(exitAct)
 
         vbox = QVBoxLayout()
-
-        col = QColor(255,0,255)
-
-        self.frame = QFrame()
-
-
+        cb = QCheckBox('show title')
+        cb.toggle()
+        cb.stateChanged.connect(self.changeTitle)
+        vbox.addWidget(cb)
 
 
+        sld = QSlider(Qt.Horizontal)
+        sld.setFocusPolicy(Qt.NoFocus)
+        vbox.addWidget(sld)
+
+        self.pbar = QProgressBar()
+        self.btn = QPushButton('按钮')
+        self.btn.clicked.connect(self.doAction)
+        vbox.addWidget(self.btn)
+        vbox.addWidget(self.pbar)
+
+        self.timer = QBasicTimer()
+        self.step = 0
+
+
+
+
+        vbox.addStretch(1)
 
         widget = QWidget()
         widget.setLayout(vbox)
@@ -74,6 +90,29 @@ class MainUI(QMainWindow):
         self.setCentralWidget(widget)
 
         self.show()
+
+    def doAction(self):
+        if self.timer.isActive():
+            self.timer.stop()
+            self.btn.setText('start')
+        else:
+            self.timer.start(100,self)
+            self.btn.setText('stop')
+
+    def timerEvent(self, e):
+        if self.step >= 100:
+            self.timer.stop()
+            self.btn.setText('start')
+            return
+        self.step = self.step + 1
+        self.pbar.setValue(self.step)
+
+
+    def changeTitle(self,state):
+        if state == Qt.Checked:
+            self.setWindowTitle('QCheck box')
+        else:
+            self.setWindowTitle('')
 
 
     def keyPressEvent (self, e):
